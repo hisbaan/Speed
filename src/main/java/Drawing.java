@@ -16,12 +16,12 @@ public class Drawing extends JPanel {
         Graphics2D g = (Graphics2D) g1;
 
         g.setColor(Color.black);
-        g.fillRect(0, 0, 800, 800);
+        g.fillRect(0, 0, Speed.FRAME_X, Speed.FRAME_Y);
 
         g.setColor(Color.white);
         for (int y = 0; y < 20; y++) {
             for (int x = 0; x < 20; x++) {
-                if (Speed.position[x][y] == 1) g.fillRect(40 * x, 40 * y, 40, 40);
+                if (Speed.position[x][y] == 1) g.fillRect((Speed.FRAME_X / 20) * x, (Speed.FRAME_Y / 20) * y, (Speed.FRAME_X / 20), (Speed.FRAME_Y / 20));
             }
         }
     }

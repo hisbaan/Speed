@@ -12,6 +12,9 @@ import java.awt.event.*;
 import java.lang.reflect.Array;
 
 public class Speed implements ActionListener, KeyListener, WindowListener {
+    public static final int FRAME_X = 800;
+    public static final int FRAME_Y = 800;
+
     JFrame mainMenuFrame = new JFrame("Main Menu");
     JPanel mainMenuBottomPannel = new JPanel();
     JButton startGameButton = new JButton("Star Game");
@@ -41,7 +44,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
     }
 
     public void mainMenu() {
-        mainMenuFrame.setSize(800, 800);
+        mainMenuFrame.setSize(FRAME_X, FRAME_Y + 50);
         mainMenuFrame.setLayout(new BorderLayout());
         mainMenuFrame.setResizable(false);
 
@@ -58,7 +61,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
     }
 
     public void startGame() {
-        gameFrame.setSize(800, 800);
+        gameFrame.setSize(FRAME_X, FRAME_Y + 50);
         gameFrame.setLayout(new BorderLayout());
         gameFrame.setResizable(false);
 
