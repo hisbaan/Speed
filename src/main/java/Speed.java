@@ -9,11 +9,12 @@ import org.graalvm.compiler.hotspot.stubs.OutOfBoundsExceptionStub;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
+import java.util.Random;
 
 public class Speed implements ActionListener, KeyListener, WindowListener {
     public static final int FRAME_X = 800;
     public static final int FRAME_Y = 800;
+    public static final boolean DEBUG = true;
 
     JFrame mainMenuFrame = new JFrame("Main Menu");
     JPanel mainMenuBottomPannel = new JPanel();
@@ -23,10 +24,13 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
     JPanel gameBottomPannel = new JPanel();
     JButton gameBackButton = new JButton("Back");
     Drawing board = new Drawing();
-    
+
     Timer movement;
-    
+
+    int tick = 250;
+    int score = 0;
     static int[][] position = new int[20][20];
+    static int[][] apple = new int[20][20];
     char direction = ' ';
 
     public static void main(String[] args) {
@@ -34,8 +38,9 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
     }
 
     Speed() {
-        movement = new Timer(100, e -> {
+        movement = new Timer(tick, e -> {
             move();
+            checkApple();
             board.validate();
             board.repaint();
         });
@@ -87,10 +92,36 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
 
         position[10][10] = 1;
 
+        newApple();
         movement.start();
 
         mainMenuFrame.setVisible(false);
         gameFrame.setVisible(true);
+    }
+
+    public void checkApple() {
+        for (int y = 0; y < 20; y++) {
+            for (int x = 0; x < 20; x++) {
+                if (position[x][y] == 1 && apple[x][y] == 1) {
+                    tick *= 0.85;
+                    System.out.println("Tick rate: " + tick);
+                    movement.setDelay(tick);
+                    newApple();
+                }
+            }
+        }
+    }
+
+    public void newApple() {
+        for (int y = 0; y < 20; y++) {
+            for (int x = 0; x < 20; x++) {
+                apple[x][y] = 0;
+            }
+        }
+
+        Random random = new Random();
+
+        apple[random.nextInt(20)][random.nextInt(20)] = 1;
     }
 
     public void move() {
@@ -122,7 +153,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
                 if (position[x][y] == 1) {
                     position[x][y - 1] = 1;
                     position[x][y] = 0;
-                    System.out.println("north");
+                    if (DEBUG) System.out.println("north");
                 }
             }
         }
@@ -135,7 +166,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
                     position[x][y + 1] = 1;
                     position[x][y] = 0;
 
-                    System.out.println("south");
+                    if (DEBUG) System.out.println("south");
                 }
             }
         }
@@ -148,7 +179,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
                     position[x + 1][y] = 1;
                     position[x][y] = 0;
 
-                    System.out.println("east");
+                    if (DEBUG) System.out.println("east");
                 }
             }
         }
@@ -161,7 +192,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
                     position[x - 1][y] = 1;
                     position[x][y] = 0;
 
-                    System.out.println("west");
+                    if (DEBUG) System.out.println("west");
                 }
             }
         }
@@ -176,8 +207,8 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
         if (e.getSource() == startGameButton) {
             startGame();
         }
-        if(e.getSource() == gameBackButton) {
-            for(int y = 0; y < 20; y++) {
+        if (e.getSource() == gameBackButton) {
+            for (int y = 0; y < 20; y++) {
                 for (int x = 0; x < 20; x++) {
                     position[x][y] = 0;
                 }
