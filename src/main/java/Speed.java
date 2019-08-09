@@ -4,9 +4,12 @@ Created: 08/08/2019
 Author: Hisbaan Noorani
 */
 
+import org.graalvm.compiler.hotspot.stubs.OutOfBoundsExceptionStub;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
 
 public class Speed implements ActionListener, KeyListener, WindowListener {
     JFrame mainMenuFrame = new JFrame("Main Menu");
@@ -20,7 +23,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
     
     Timer movement;
     
-    int[][] position = new int[20][20];
+    static int[][] position = new int[20][20];
     char direction = ' ';
 
     public static void main(String[] args) {
@@ -33,6 +36,8 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
             board.validate();
             board.repaint();
         });
+
+        mainMenu();
     }
 
     public void mainMenu() {
@@ -86,36 +91,41 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
     }
 
     public void move() {
-        switch (direction) {
-            case 'n':
-                north();
-                break;
-            case 's':
-                south();
-                break;
-            case 'e':
-                east();
-                break;
-            case 'w':
-                west();
-                break;
-            default:
-                break;
+        try {
+            switch (direction) {
+                case 'n':
+                    north();
+                    break;
+                case 's':
+                    south();
+                    break;
+                case 'e':
+                    east();
+                    break;
+                case 'w':
+                    west();
+                    break;
+                default:
+                    break;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            gameOver();
         }
     }
 
-    public void north() {
+    public void north() throws ArrayIndexOutOfBoundsException {
         for (int y = 0; y < 20; y++) {
             for (int x = 0; x < 20; x++) {
                 if (position[x][y] == 1) {
                     position[x][y - 1] = 1;
+                    position[x][y] = 0;
                     System.out.println("north");
                 }
             }
         }
     }
 
-    public void south() {
+    public void south() throws ArrayIndexOutOfBoundsException {
         for (int y = 19; y >= 0; y--) {
             for (int x = 0; x < 20; x++) {
                 if (position[x][y] > 0) {
@@ -128,7 +138,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
         }
     }
 
-    public void east() {
+    public void east() throws ArrayIndexOutOfBoundsException {
         for (int y = 0; y < 20; y++) {
             for (int x = 19; x >= 0; x--) {
                 if (position[x][y] > 0) {
@@ -141,7 +151,7 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
         }
     }
 
-    public void west() {
+    public void west() throws ArrayIndexOutOfBoundsException {
         for (int y = 0; y < 20; y++) {
             for (int x = 0; x < 20; x++) {
                 if (position[x][y] > 0) {
@@ -152,6 +162,10 @@ public class Speed implements ActionListener, KeyListener, WindowListener {
                 }
             }
         }
+    }
+
+    public void gameOver() {
+        //code for game over here
     }
 
     @Override

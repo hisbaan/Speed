@@ -15,9 +15,13 @@ public class Drawing extends JPanel {
     public void paint(Graphics g1) {
         Graphics2D g = (Graphics2D) g1;
 
-        for(int y = 0; y < 20; y++) {
+        g.setColor(Color.black);
+        g.fillRect(0, 0, 800, 800);
+
+        g.setColor(Color.white);
+        for (int y = 0; y < 20; y++) {
             for (int x = 0; x < 20; x++) {
-                //paint object in array here
+                if (Speed.position[x][y] == 1) g.fillRect(40 * x, 40 * y, 40, 40);
             }
         }
     }
